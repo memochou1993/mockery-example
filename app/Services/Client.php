@@ -24,7 +24,9 @@ class Client
 
         $results = json_decode($response->getBody()->getContents(), true);
 
-        $item = collect($results['data'])->where('symbol', $symbol)->first();
+        $item = collect($results['data'])->filter(function ($item) use ($symbol) {
+            return $item['symbol'] === trim(strtoupper($symbol));
+        })->first();
 
         return Arr::get($item, 'quote');
     }

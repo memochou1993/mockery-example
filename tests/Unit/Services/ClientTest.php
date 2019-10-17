@@ -16,7 +16,7 @@ class ClientTest extends TestCase
         $guzzleClient = Mockery::mock(GuzzleClient::class);
         $guzzleClient->shouldReceive('request')->andReturn(
             new Response('200', [], file_get_contents(__DIR__.'/result.json'))
-        );
+        )->once();
 
         $client = new Client($guzzleClient);
 
@@ -31,5 +31,12 @@ class ClientTest extends TestCase
                 'last_updated' => '2019-10-16T15:52:37.000Z'
             ],
         ], $client->query('BTC'));
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        Mockery::close();
     }
 }
