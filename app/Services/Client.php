@@ -9,16 +9,22 @@ class Client
 {
     protected $client;
 
-    public function __construct(GuzzleClient $client)
+    protected $log;
+
+    public function __construct(GuzzleClient $client, Log $log)
     {
         $this->client = $client;
+        $this->log = $log;
     }
 
     public function query($symbol = 'BTC')
     {
+        $key = env('CMC_PRO_API_KEY');
+        $this->log->info($key);
+
         $response = $this->client->request('GET', 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', [
             'headers' => [
-                'X-CMC_PRO_API_KEY' => env('CMC_PRO_API_KEY'),
+                'X-CMC_PRO_API_KEY' => $key,
             ],
         ]);
 

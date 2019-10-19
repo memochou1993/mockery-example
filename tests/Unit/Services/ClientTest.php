@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services;
 
 use Mockery;
+use App\Services\Log;
 use App\Services\Client;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +19,9 @@ class ClientTest extends TestCase
             new Response('200', [], file_get_contents(__DIR__.'/result.json'))
         )->once();
 
-        $client = new Client($guzzleClient);
+        $log = Mockery::spy(Log::class);
+
+        $client = new Client($guzzleClient, $log);
 
         $this->assertEquals([
             'USD' => [
@@ -31,6 +34,9 @@ class ClientTest extends TestCase
                 'last_updated' => '2019-10-16T15:52:37.000Z'
             ],
         ], $client->query('BTC'));
+
+        $key = env('CMC_PRO_API_KEY');
+        $log->shouldHaveReceived('info')->with($key);
     }
 
     protected function tearDown(): void

@@ -11,6 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function (\App\Services\Client $client) {
+    return $client->query();
 });
