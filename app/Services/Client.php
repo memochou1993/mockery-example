@@ -11,6 +11,10 @@ class Client
 
     protected $log;
 
+    /**
+     * @var  \GuzzleHttp\Client|\Mockery\MockInterface|\Mockery\LegacyMockInterface
+     * @var  \App\Services\Log|\Mockery\MockInterface|\Mockery\LegacyMockInterface
+     */
     public function __construct(GuzzleClient $client, Log $log)
     {
         $this->client = $client;
